@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agricultural Market Intelligence & Food Security Monitoring System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: #f4f7fa;
+      color: #333;
+    }
+
+    header {
+      background-color: #2e7d32;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 24px;
+    }
+
+    nav {
+      background-color: #1b5e20;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 10px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    section {
+      padding: 30px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    h2 {
+      color: #2e7d32;
+      margin-bottom: 10px;
+    }
+
+    p, ul {
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    #map {
+      height: 500px;
+      width: 100%;
+      border: 2px solid #2e7d32;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #2e7d32;
+      color: white;
+      margin-top: 40px;
+    }
+
+    select {
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Agricultural Market Intelligence & Food Security Monitoring System</h1>
+  </header>
+
+  <nav>
+    <a href="#summary">Executive Summary</a>
+    <a href="#problem">Problem</a>
+    <a href="#goals">Goals</a>
+    <a href="#solution">Solution</a>
+    <a href="#map">Hunger Hotspots</a>
+  </nav>
+
+  <section id="summary">
+    <h2>Executive Summary</h2>
+    <p>This AI/ML-driven platform provides real-time insights into agricultural markets, supply chains, and price dynamics for better decision-making and policy interventions by ministries to ensure food security and market stability.</p>
+  </section>
+
+  <section id="problem">
+    <h2>Problem Statement</h2>
+    <p>Traditional methods lack the speed and detail required for real-time agricultural monitoring, leading to missed opportunities and market instability that affects both farmers and consumers.</p>
+  </section>
+
+  <section id="goals">
+    <h2>Project Goals & Objectives</h2>
+    <ul>
+      <li>Scrape and unify real-time agri-market data from APIs.</li>
+      <li>AI/ML-driven price predictions and risk alerts.</li>
+      <li>Policy suggestions using anomaly and sentiment analysis.</li>
+      <li>Interactive dashboards and real-time map-based risk insights.</li>
+    </ul>
+  </section>
+
+  <section id="solution">
+    <h2>Proposed Solution & Methodology</h2>
+    <p>The system integrates web scraping, time series forecasting, anomaly detection, yield estimation, and hunger risk mapping using satellite and socio-economic data. AI models generate insights, while the dashboard displays alerts and maps for policy action.</p>
+  </section>
+
+  <section id="map">
+    <h2>Real-Time Hunger Hotspot Map</h2>
+    <label for="stateSelector">Select State:</label>
+    <select id="stateSelector" onchange="zoomToState()">
+      <option value="">--Choose a State--</option>
+      <option value="Delhi">Delhi</option>
+      <option value="Maharashtra">Maharashtra</option>
+      <option value="Bihar">Bihar</option>
+      <option value="Uttar Pradesh">Uttar Pradesh</option>
+      <option value="Andhra Pradesh">Uttar Pradesh</option>
+      <option value="Arunachal Pradesh">Uttar Pradesh</option>
+      <option value="Assam">Uttar Pradesh</option>
+      <option value="Chattisgarh">Uttar Pradesh</option>
+      <option value="Goa">Uttar Pradesh</option>
+      <option value="Gujrat">Uttar Pradesh</option>
+      <option value="Haryana">Uttar Pradesh</option>
+      <option value="Himachal Pradesh">Uttar Pradesh</option>
+      <option value="Jharkhand">Uttar Pradesh</option>
+      <option value="Karnataka">Uttar Pradesh</option>
+      <option value="Kerela">Uttar Pradesh</option>
+      <option value="Madhya Pradesh">Uttar Pradesh</option>
+      <option value="Maharashtra">Uttar Pradesh</option>
+      <option value="Manipu">Uttar Pradesh</option>
+      <option value="Meghalaya">Uttar Pradesh</option>
+      <option value="Mizoram">Uttar Pradesh</option>
+      <option value="Nagaland">Uttar Pradesh</option>
+      <option value="Odisha">Uttar Pradesh</option>
+      <option value="Punjab">Uttar Pradesh</option>
+      <option value="Rajasthan">Uttar Pradesh</option>
+      <option value="Sikkim">Uttar Pradesh</option>
+      <!-- Add more states as needed -->
+    </select>
+    <div id="map"></div>
+  </section>
+
+  <footer>
+    &copy; 2025 Agricultural Market Intelligence & Food Security Monitoring Initiative
+  </footer>
+
+  <script>
+    let map;
+
+    const stateCoords = {
+      "Delhi": { lat: 28.6139, lng: 77.2090 },
+      "Maharashtra": { lat: 19.7515, lng: 75.7139 },
+      "Bihar": { lat: 25.0961, lng: 85.3131 },
+      "Uttar Pradesh": { lat: 26.8467, lng: 80.9462 }
+    };
+
+    const hotspotMarkers = [
+      { lat: 28.6, lng: 77.2, severity: 'high' },
+      { lat: 25.09, lng: 85.31, severity: 'medium' },
+      { lat: 19.75, lng: 75.71, severity: 'critical' },
+      { lat: 26.84, lng: 80.94, severity: 'low' }
+    ];
+
+    function initMap() {
+      map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: 23.5937, lng: 80.9629 },
+        zoom: 5,
+      });
+
+      hotspotMarkers.forEach(hotspot => {
+        const colorMap = {
+          'low': 'green',
+          'medium': 'orange',
+          'high': 'red',
+          'critical': 'darkred'
+        };
+
+        new google.maps.Marker({
+          position: { lat: hotspot.lat, lng: hotspot.lng },
+          map,
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 10,
+            fillColor: colorMap[hotspot.severity],
+            fillOpacity: 0.7,
+            strokeWeight: 0.5
+          },
+          title: `Severity: ${hotspot.severity}`
+        });
+      });
+    }
+
+    function zoomToState() {
+      const selectedState = document.getElementById('stateSelector').value;
+      if (stateCoords[selectedState]) {
+        map.setZoom(7);
+        map.setCenter(stateCoords[selectedState]);
+      }
+    }
+
+    window.onload = initMap;
+  </script>
+</body>
+</html>

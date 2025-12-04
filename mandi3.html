@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agricultural Market Intelligence & Food Security Monitoring System</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background: #2e7d32;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #1b5e20;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 10px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        nav a:hover {
+            background: #575757;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .card {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #map {
+            height: 500px;
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        select {
+            padding: 0.5rem;
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        .severity-legend {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+        }
+
+        .alert-box {
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 10px;
+        }
+
+
+        section {
+            padding: 30px;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        h2 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        h3 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+            font-size: 15px;
+            ;
+        }
+
+        p,
+        ul {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #2e7d32;
+            color: white;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Agricultural Market Intelligence & Food Security Monitoring System</h1>
+    </header>
+
+
+
+    <nav>
+        <a href="#summary">Executive Summary</a>
+        <a href="#problem">Problem</a>
+        <a href="#goals">Goals</a>
+        <a href="#solution">Solution</a>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#map-section">Hunger Hotspots</a>
+        <a href="#alerts">Alerts</a>
+    </nav>
+
+    <section id="summary">
+        <h2>Executive Summary</h2>
+        <p>This AI/ML-driven platform provides real-time insights into agricultural markets, supply chains, and price
+            dynamics for better decision-making and policy interventions by ministries to ensure food security and
+            market stability.</p>
+    </section>
+
+    <section id="problem">
+        <h2>Problem Statement</h2>
+        <p>Traditional methods lack the speed and detail required for real-time agricultural monitoring, leading to
+            missed opportunities and market instability that affects both farmers and consumers.</p>
+    </section>
+
+    <section id="goals">
+        <h2>Project Goals & Objectives</h2>
+        <ul>
+            <li>Scrape and unify real-time agri-market data from APIs.</li>
+            <li>AI/ML-driven price predictions and risk alerts.</li>
+            <li>Policy suggestions using anomaly and sentiment analysis.</li>
+            <li>Interactive dashboards and real-time map-based risk insights.</li>
+        </ul>
+    </section>
+
+    <section id="solution">
+        <h2>Proposed Solution & Methodology</h2>
+        <p>The system integrates web scraping, time series forecasting, anomaly detection, yield estimation, and hunger
+            risk mapping using satellite and socio-economic data. AI models generate insights, while the dashboard
+            displays alerts and maps for policy action.</p>
+    </section>
+
+    <div class="container" id="dashboard">
+        <div class="card">
+            <h2>Project Overview</h2>
+            <p>This platform aggregates real-time agricultural market data and visualizes food security risks for
+                proactive policymaking.</p>
+            <select id="stateSelector" onchange="zoomToState()">
+                <option value="">Select State</option>
+                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Bihar">Bihar</option>
+                <option value="Tamil Nadu">Tamil Nadu</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Bihar">Bihar</option>
+                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                <option value="Assam">Assam</option>
+                <option value="Chattisgarh">Chattisgarh</option>
+                <option value="Goa">Goa</option>
+                <option value="Gujrat">Gujrat</option>
+                <option value="Haryana"> Haryana</option>
+                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                <option value="Jharkhand">Jharkhand</option>
+                <option value="Karnataka"> Karnataka</option>
+                <option value="Kerela">Kerela </option>
+                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Manipur">Manipur</option>
+                <option value="Meghalaya">Meghalaya</option>
+                <option value="Mizoram">Mizoram</option>
+                <option value="Nagaland">Nagaland</option>
+                <option value="Odisha">Odisha</option>
+                <option value="Punjab">Punjab</option>
+                <option value="Rajasthan">Rajasthan</option>
+                <option value="Sikkim">Sikkim</option>
+                <!-- Add more states as needed -->
+            </select>
+            <div class="severity-legend">
+                <div class="legend-item">
+                    <div class="color-box" style="background:red"></div> Severe
+                </div>
+                <div class="legend-item">
+                    <div class="color-box" style="background:orange"></div> High
+                </div>
+                <div class="legend-item">
+                    <div class="color-box" style="background:yellow"></div> Moderate
+                </div>
+                <div class="legend-item">
+                    <div class="color-box" style="background:green"></div> Low
+                </div>
+            </div>
+        </div>
+        <div class="card" id="map-section">
+            <h2>Real-Time Hunger Hotspots</h2>
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <div class="container" id="alerts">
+        <div class="card">
+            <h2>Latest Alerts</h2>
+            <div class="alert-box">Wheat prices in Punjab rising abnormally - Possible hoarding detected.</div>
+            <div class="alert-box">Supply chain disruption alert in Bihar due to heavy rains affecting transportation.
+            </div>
+            <div class="alert-box">Food insecurity hotspot flagged in Eastern Uttar Pradesh - Immediate intervention
+                needed.</div>
+        </div>
+        <div class="card">
+            <h2>Predicted Trends</h2>
+            <p>Onions prices expected to rise by 10% over the next two weeks due to supply shortages.</p>
+            <p>Pulse production forecasted to be below average in Maharashtra.</p>
+
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 Agricultural Market Intelligence & Food Security Monitoring Initiative
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([22.9734, 78.6569], 5);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        var hotspots = [
+            { name: 'Eastern Uttar Pradesh', coords: [26.8467, 80.9462], severity: 'red' },
+            { name: 'Marathwada, Maharashtra', coords: [19.5667, 75.1167], severity: 'orange' },
+            { name: 'Northern Bihar', coords: [25.5908, 85.1376], severity: 'yellow' },
+            { name: 'Delta Region, Tamil Nadu', coords: [10.7905, 79.1377], severity: 'green' }
+        ];
+
+        hotspots.forEach(hotspot => {
+            L.circle(hotspot.coords, {
+                color: hotspot.severity,
+                fillColor: hotspot.severity,
+                fillOpacity: 0.5,
+                radius: 30000
+            }).bindPopup(`<b>${hotspot.name}</b>`).addTo(map);
+        });
+
+        function zoomToState() {
+            const state = document.getElementById('stateSelector').value;
+            let coords = {
+                'Uttar Pradesh': [26.8467, 80.9462],
+                'Maharashtra': [19.7515, 75.7139],
+                'Bihar': [25.0961, 85.3131],
+                'Tamil Nadu': [11.1271, 78.6569]
+            };
+            if (state && coords[state]) {
+                map.setView(coords[state], 7);
+            }
+        }
+    </script>
+</body>
+
+</html>
